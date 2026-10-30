@@ -1,0 +1,20 @@
+{
+  "name": "tdd-lab-nodejs-vitest",
+  "version": "1.0.0",
+  "description": "TDD lab bootstrapping a Vitest test suite with TypeScript, ready to go in a dev container",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "eslint": "10.14.0",
+    "neostandard": "0.14.1",
+    "typescript": "6.0.3",
+    "vitest": "5.0.5"
+  }
+}
