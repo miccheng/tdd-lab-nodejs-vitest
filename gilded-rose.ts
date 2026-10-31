@@ -10,7 +10,6 @@ export class Item {
   }
 }
 
-const DEFAULT_SELL_IN_PROGRESSION = -1
 const DEFAULT_QUALITY_PROGRESSION = -1
 
 const SpecialProductCategories = {
@@ -30,32 +29,24 @@ export class GildedRose {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i]
 
-      let sellInRate = DEFAULT_SELL_IN_PROGRESSION
       let qualityRate = DEFAULT_QUALITY_PROGRESSION
 
+      // Legendary Item - cannot sell & won't degrade in quality
       if (item.name === SpecialProductCategories.Sulfuras) {
         continue
       }
 
+      item.sellIn = item.sellIn - 1
+
+      // Increases in Quality
       if (item.name === SpecialProductCategories.AgedBrie) {
-        item.sellIn = item.sellIn + sellInRate
-
         qualityRate = 1
-        if (item.sellIn < 0) {
-          qualityRate = qualityRate * 2
-        }
-
-        item.quality = item.quality + qualityRate
-
-        if (item.quality > 50) item.quality = 50
-        continue
       }
 
+      // Becomes more valuable closer to the concert date. Drops to zero after the concert.
       if (item.name === SpecialProductCategories.BackstagePass) {
-        item.sellIn = item.sellIn + sellInRate
-
         if (item.sellIn < 0) {
-          item.quality = 0
+          qualityRate = -item.quality
         } else {
           qualityRate = 1
           if (item.sellIn < 5) {
@@ -63,14 +54,8 @@ export class GildedRose {
           } else if (item.sellIn < 10) {
             qualityRate = 2
           }
-
-          item.quality = item.quality + qualityRate
-          if (item.quality > 50) item.quality = 50
         }
-        continue
       }
-
-      item.sellIn = item.sellIn + sellInRate
 
       if (item.sellIn < 0) {
         qualityRate = qualityRate * 2
