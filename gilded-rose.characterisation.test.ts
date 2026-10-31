@@ -27,7 +27,8 @@ describe('Gilded Rose characterisation', () => {
       gildedRose.updateQuality()
     }
 
-    const expected = readFileSync(resolve(process.cwd(), 'texttests/ThirtyDays/stdout.gr'), 'utf8')
+    // const expected = readFileSync(resolve(process.cwd(), 'texttests/ThirtyDays/stdout.gr'), 'utf8')
+    const expected = readFileSync(resolve(process.cwd(), 'texttests/ConjuredThirtyDays/stdout.gr'), 'utf8')
     expect(`${lines.join('\n')}\n`).toBe(expected)
   })
 })

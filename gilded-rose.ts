@@ -14,8 +14,9 @@ const DEFAULT_QUALITY_PROGRESSION = -1
 
 const SpecialProductCategories = {
   AgedBrie: 'Aged Brie',
-  BackstagePass: 'Backstage passes to a TAFKAL80ETC concert',
-  Sulfuras: 'Sulfuras, Hand of Ragnaros'
+  BackstagePasses: 'backstage passes',
+  Sulfuras: 'sulfuras',
+  Conjured: 'conjured'
 } as const
 
 export class GildedRose {
@@ -32,7 +33,7 @@ export class GildedRose {
       let qualityRate = DEFAULT_QUALITY_PROGRESSION
 
       // Legendary Item - cannot sell & won't degrade in quality
-      if (item.name === SpecialProductCategories.Sulfuras) {
+      if (item.name.toLowerCase().includes(SpecialProductCategories.Sulfuras.valueOf())) {
         continue
       }
 
@@ -44,7 +45,7 @@ export class GildedRose {
       }
 
       // Becomes more valuable closer to the concert date. Drops to zero after the concert.
-      if (item.name === SpecialProductCategories.BackstagePass) {
+      if (item.name.toLowerCase().includes(SpecialProductCategories.BackstagePasses.valueOf())) {
         if (item.sellIn < 0) {
           qualityRate = -item.quality
         } else {
@@ -55,6 +56,10 @@ export class GildedRose {
             qualityRate = 2
           }
         }
+      }
+
+      if (qualityRate < 0 && item.name.toLowerCase().includes(SpecialProductCategories.Conjured.valueOf())) {
+        qualityRate = qualityRate * 2
       }
 
       if (item.sellIn < 0) {
