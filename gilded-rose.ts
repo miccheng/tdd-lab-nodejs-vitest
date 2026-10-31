@@ -10,6 +10,9 @@ export class Item {
   }
 }
 
+const DEFAULT_SELL_IN_PROGRESSION = -1
+const DEFAULT_QUALITY_PROGRESSION = -1
+
 const SpecialProductCategories = {
   AgedBrie: 'Aged Brie',
   BackstagePass: 'Backstage passes to a TAFKAL80ETC concert',
@@ -27,40 +30,55 @@ export class GildedRose {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i]
 
-      if (![SpecialProductCategories.AgedBrie.valueOf(), SpecialProductCategories.BackstagePass.valueOf()].includes(item.name)) {
-        if (item.quality > 0 && item.name !== SpecialProductCategories.Sulfuras) {
-          item.quality = item.quality - 1
-        }
-      } else {
-        if (item.quality < 50) {
-          item.quality = item.quality + 1
-          if (item.name === SpecialProductCategories.BackstagePass && item.quality < 50) {
-            if (item.sellIn < 6) {
-              item.quality = item.quality + 2
-            } else if (item.sellIn < 11) {
-              item.quality = item.quality + 1
-            }
-          }
-        }
+      let sellInRate = DEFAULT_SELL_IN_PROGRESSION
+      let qualityRate = DEFAULT_QUALITY_PROGRESSION
+
+      if (item.name === SpecialProductCategories.Sulfuras) {
+        continue
       }
 
-      if (item.name !== SpecialProductCategories.Sulfuras) {
-        item.sellIn = item.sellIn - 1
+      if (item.name === SpecialProductCategories.AgedBrie) {
+        item.sellIn = item.sellIn + sellInRate
+
+        qualityRate = 1
+        if (item.sellIn < 0) {
+          qualityRate = qualityRate * 2
+        }
+
+        item.quality = item.quality + qualityRate
+
+        if (item.quality > 50) item.quality = 50
+        continue
       }
+
+      if (item.name === SpecialProductCategories.BackstagePass) {
+        item.sellIn = item.sellIn + sellInRate
+
+        if (item.sellIn < 0) {
+          item.quality = 0
+        } else {
+          qualityRate = 1
+          if (item.sellIn < 5) {
+            qualityRate = 3
+          } else if (item.sellIn < 10) {
+            qualityRate = 2
+          }
+
+          item.quality = item.quality + qualityRate
+          if (item.quality > 50) item.quality = 50
+        }
+        continue
+      }
+
+      item.sellIn = item.sellIn + sellInRate
 
       if (item.sellIn < 0) {
-        if (item.name !== SpecialProductCategories.AgedBrie) {
-          if (item.name !== SpecialProductCategories.BackstagePass) {
-            if (item.quality > 0 && item.name !== SpecialProductCategories.Sulfuras) {
-              item.quality = item.quality - 1
-            }
-          } else {
-            item.quality = 0
-          }
-        } else if (item.quality < 50) {
-          item.quality = item.quality + 1
-        }
+        qualityRate = qualityRate * 2
       }
+      item.quality = item.quality + qualityRate
+
+      if (item.quality < 0) item.quality = 0
+      if (item.quality > 50) item.quality = 50
     }
 
     return this.items
