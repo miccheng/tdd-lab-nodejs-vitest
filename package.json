@@ -1,7 +1,7 @@
 {
   "name": "tdd-lab-nodejs-vitest",
   "version": "1.0.0",
-  "description": "TDD lab bootstrapping a Vitest test suite with TypeScript, ready to go in a dev container",
+  "description": "Gilded Rose Refactoring Kata with Vitest and TypeScript, ready to go in a dev container",
   "private": true,
   "type": "module",
   "scripts": {
