@@ -54,6 +54,8 @@ configuration.
 
 - `gilded-rose.ts` — the legacy `GildedRose` code and the `Item` model
 - `gilded-rose.test.ts` — the starting Vitest test
+- `gilded-rose.characterisation.test.ts` — the 30-day golden-master test
+- `texttests/ThirtyDays/stdout.gr` — the expected characterisation test output
 - `GildedRoseRequirements.md` — the kata requirements
 - `vitest.config.ts` — Vitest test discovery configuration
 - `tsconfig.json` — strict TypeScript configuration
