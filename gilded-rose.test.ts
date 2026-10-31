@@ -3,8 +3,11 @@ import { GildedRose, Item } from './gilded-rose'
 
 describe('Gilded Rose', () => {
   it('should keep the item name', () => {
-    const gildedRose = new GildedRose([new Item('foo', 0, 0)])
-    const items = gildedRose.updateQuality()
-    expect(items[0].name).toBe('foo')
+    const item = new Item('foo', 0, 0)
+    const gildedRose = new GildedRose([item])
+
+    gildedRose.updateQuality()
+
+    expect(item.name).toBe('foo')
   })
 })

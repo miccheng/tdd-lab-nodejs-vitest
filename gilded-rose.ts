@@ -3,62 +3,65 @@ export class Item {
   sellIn: number
   quality: number
 
-  constructor (name: string, sellIn: number, quality: number) {
+  constructor(name: string, sellIn: number, quality: number) {
     this.name = name
     this.sellIn = sellIn
     this.quality = quality
   }
 }
 
+const SpecialProductCategories = {
+  AgedBrie: 'Aged Brie',
+  BackstagePass: 'Backstage passes to a TAFKAL80ETC concert',
+  Sulfuras: 'Sulfuras, Hand of Ragnaros'
+} as const
+
 export class GildedRose {
   items: Item[]
 
-  constructor (items = [] as Item[]) {
+  constructor(items = [] as Item[]) {
     this.items = items
   }
 
-  updateQuality () {
+  updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name !== 'Aged Brie' && this.items[i].name !== 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name !== 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name === 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-          }
+      const subjectItem = this.items[i]
+
+      if (
+        ![SpecialProductCategories.AgedBrie.valueOf(), SpecialProductCategories.BackstagePass.valueOf()].includes(subjectItem.name) &&
+        subjectItem.quality > 0 &&
+        subjectItem.name !== SpecialProductCategories.Sulfuras
+      ) {
+        subjectItem.quality = subjectItem.quality - 1
+      } else if (subjectItem.quality < 50) {
+        if (
+          subjectItem.name === SpecialProductCategories.BackstagePass &&
+          (subjectItem.sellIn < 11 || subjectItem.sellIn < 6)
+        ) {
+          subjectItem.quality = subjectItem.quality + 2
+        } else {
+          subjectItem.quality = subjectItem.quality + 1
         }
       }
-      if (this.items[i].name !== 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1
+
+      if (subjectItem.name !== SpecialProductCategories.Sulfuras) {
+        subjectItem.sellIn = subjectItem.sellIn - 1
       }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name !== 'Aged Brie') {
-          if (this.items[i].name !== 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name !== 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
+
+      if (subjectItem.sellIn < 0) {
+        if (subjectItem.name !== SpecialProductCategories.AgedBrie) {
+          if (subjectItem.name !== SpecialProductCategories.BackstagePass) {
+            if (subjectItem.quality > 0) {
+              if (subjectItem.name !== SpecialProductCategories.Sulfuras) {
+                subjectItem.quality = subjectItem.quality - 1
               }
             }
           } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
+            subjectItem.quality = subjectItem.quality - subjectItem.quality
           }
         } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
+          if (subjectItem.quality < 50) {
+            subjectItem.quality = subjectItem.quality + 1
           }
         }
       }
